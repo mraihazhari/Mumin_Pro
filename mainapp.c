@@ -50,7 +50,6 @@ struct keluarga{ //struct untuk anggota keluarga waris
 //end of codes block
 //----------------------------------------------------
 
-
 void input_data(Amalanptr *sptr);
 void input_menu();
 void printAmalan(Amalanptr current, int day_removed[50], User *userptr);
@@ -80,10 +79,10 @@ int main(){
 	
 	int menu, day, i, j, id_input,id, mutabaah, status, login, login_status, file_status, posisi;
 	int day_removed[50] = {}; //array untuk mengetahui hari yang telah di remove
-  struct keluarga keluarga; //mendefinisikan struct keluarga
-  int warisan[10]; //isi harta warisan yang diterima masing-masing anggota keluarga
-  int harta, hutang; //total harta yang diwarisi
-  int pewaris, keturunan, saudara, orangtua, pilih; //variabel cek kondisi 
+	struct keluarga keluarga; //mendefinisikan struct keluarga
+	int warisan[10]; //isi harta warisan yang diterima masing-masing anggota keluarga
+	int harta, hutang; //total harta yang diwarisi
+	int pewaris, keturunan, saudara, orangtua, pilih; //variabel cek kondisi 
 	
 	//set variabel ke 0 untuk mencegah adanya garbage value
 	menu = 0;
@@ -96,22 +95,22 @@ int main(){
 	/*Tadinya kami ingin membuat multi-user berdasarka idnya, namun karena kesulitan pada file handling maka
 		kami membuat 1 user saja, namun tetap menggunakan pointer struct*/
   
-  //start pointer dibuat NULL
+  	//start pointer dibuat NULL
 	Amalanptr startptr = NULL;
 	
-//pembacaan file
+	//pembacaan file
 	file_status = file_user_read(userptr, day_removed); // file_user_read merupakan file data user
 	file_removed_read(day_removed); //file_removed_read merupakan file untuk membaca hari hari yang telah diremove
 	
-  //posisi untuk membaca file di set ke-0 untuk mencegah garbage value
+	//posisi untuk membaca file di set ke-0 untuk mencegah garbage value
 	posisi = 0;
 	
-  //jika file_amalan_read masih belum dibuat
+  	//jika file_amalan_read masih belum dibuat
 	if((userptr + id)->day == 0){
 		file_amalan_read(&startptr, day_removed, 0, &posisi);
 	}
 	
-  //jika file_amalan_read sudah dibuat
+	//jika file_amalan_read sudah dibuat
 	else{
 	//loop dijalankan sebanyak data hari yang telah diinput oleh user
 		for(i = 0; i < (userptr + id)->day - 1; i++){
@@ -121,7 +120,7 @@ int main(){
 		file_amalan_read(&startptr, day_removed, -1, &posisi);
 	}
 	
-  //link dari userptr dilink ke alamat awal dari link list amalan (startptr)
+	//link dari userptr dilink ke alamat awal dari link list amalan (startptr)
 	(userptr + id)->data = startptr; 
 	
 	//loop akan terus berjalan hingga user memasukan angka -1
@@ -138,7 +137,7 @@ int main(){
 			case 1: 
 			//---------------------------------------------------
 			//case 1 (Mutaba'ah Yaumiah) was made by M. Raihan Azhari
-      //loop akan terus berjalan sampai user memasukan angka -1
+    	//loop akan terus berjalan sampai user memasukan angka -1
 				while(mutabaah != -1){
 					help_mutabaah();
 					printf("\nMasukan pilihan metode mutabaah: ");
@@ -166,7 +165,7 @@ int main(){
 						break;
 						
 					case 2:
-          //case 2 user diminta untuk menginput amalan ibadah sesuai hari yang diinginkan						
+            //case 2 user diminta untuk menginput amalan ibadah sesuai hari yang diinginkan						
 						if((userptr + id)->target_status != 1){
 							printf("\nHarap masukan target terlebih dahulu\n\n");
 							system("pause");
@@ -180,7 +179,7 @@ int main(){
             //user meminta input amalan sebanyak hari yang diinginkan
 						for(i = 0; i < day; i++){
 							printf("\n\nAmalan hari ke-%d", (userptr->day) + i + 1);
-              //input_data dipassing address dari start pointer sebagai pointer awal dalam link listed
+                //input_data dipassing address dari start pointer sebagai pointer awal dalam link listed
 							input_data(&startptr);
 						}
 						(userptr + id)->data = startptr; 
