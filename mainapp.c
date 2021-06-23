@@ -67,6 +67,8 @@ int menuZakat();
 void zakatPenghasilan();
 void zakatMaal();
 void list_zakatMaal();
+void petunjuk_zakatPenghasilan();
+void petunjuk_zakatMaal();
 int jumlah(int x[], int n, int i);
 int zakat(int * x, int y);
 void perhitungan(int harta, int warisan[10], struct keluarga keluarga, int keturunan, int saudara, int orangtua); //algoritma perhitungan harta warisan
