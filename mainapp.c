@@ -503,13 +503,13 @@ void printAmalan(Amalanptr current, int day_removed[50], User *userptr){
 		
 		}
 	}
+	//test
 		current = current->next;
 		counter++;
 	}
 	
 	userptr->day = counter;
-	
-	
+		
 }
 
 //end of codes block
