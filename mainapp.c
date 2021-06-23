@@ -90,7 +90,6 @@ int main(){
 	menu = 0;
 	mutabaah = 0;
 	id = 0;
-  printf("GitHub test");
 	//struct user dalam fungsi ini dapat dipanggil melalui pointer *userptr
 	User *userptr;
 	userptr = (User*) calloc(1, 2 * sizeof(User));
