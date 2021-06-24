@@ -138,7 +138,7 @@ int main(){
 			case 1: 
 			//---------------------------------------------------
 			//case 1 (Mutaba'ah Yaumiah) was made by M. Raihan Azhari
-    	//loop akan terus berjalan sampai user memasukan angka -1
+    		//loop akan terus berjalan sampai user memasukan angka -1
 				while(mutabaah != -1){
 					help_mutabaah();
 					printf("\nMasukan pilihan metode mutabaah: ");
@@ -146,8 +146,8 @@ int main(){
 					system("cls");
 					switch (mutabaah){
 					case 1: 
-            // user diminta untuk menginput identitas dan target ibadah
-            //target_status bernialai 1 menandakan user sudah menginput data identitas dan target
+            			// user diminta untuk menginput identitas dan target ibadah
+            			//target_status bernialai 1 menandakan user sudah menginput data identitas dan target
 						(userptr + id)->target_status = 1; 
 						printf("\nMasukan Nama : ");
 						scanf("%s", &(userptr + id)->nama);
@@ -166,7 +166,8 @@ int main(){
 						break;
 						
 					case 2:
-            //case 2 user diminta untuk menginput amalan ibadah sesuai hari yang diinginkan						
+           				 //case 2 user diminta untuk menginput amalan ibadah sesuai hari yang diinginkan		
+						//jika target status != 1 maka error handling akan berjalan dan user diharapkan input case 1 terlebih dahulu				
 						if((userptr + id)->target_status != 1){
 							printf("\nHarap masukan target terlebih dahulu\n\n");
 							system("pause");
@@ -177,15 +178,15 @@ int main(){
 						printf("\nAssalamualaikum %s", (userptr + id)->nama);
 						printf("\nMasukan jumlah hari yang akan diinput: ");
 						scanf("%d", &day);
-            //user meminta input amalan sebanyak hari yang diinginkan
+           				 //user meminta input amalan sebanyak hari yang diinginkan
 						for(i = 0; i < day; i++){
 							printf("\n\nAmalan hari ke-%d", (userptr->day) + i + 1);
-                //input_data dipassing address dari start pointer sebagai pointer awal dalam link listed
+               			 //input_data dipassing address dari start pointer sebagai pointer awal dalam link listed
 							input_data(&startptr);
 						}
+						//struct dari userptr dihubungkan ke starting pointer link listed amalan harian
 						(userptr + id)->data = startptr; 
 						system("cls");
-	
 						printf("\n\ninput berhasil !\n");
 						printAmalan((userptr + id)->data, day_removed, userptr);
 						printf("\n\n");
@@ -194,22 +195,26 @@ int main(){
 						break;
 						
 					case 3:
-						
+						//case 3 user ditampilkan hasil evaluasi ibadah harian yang telah diinput
+						//error handling jika user belum memasukan identitas dan target
 						if((userptr + id)->target_status != 1){
 							printf("\nHarap masukan target terlebih dahulu\n\n");
 							system("pause");
 							system("cls");
 							break;
 						}
+						//mencetak detail amalan harian yang dilakukan oleh user
 						printAmalan((userptr + id)->data, day_removed, userptr);
 						printf("\n\n");
 						system("pause");
 						system("cls");
+						//mencetak rekap amalan harian yang dilakukan oleh user beserta evaluasinya
 						print_evaluasi((userptr + id)->data, userptr, day_removed);
 						printf("\n\n");
 						system("pause");
 						system("cls"); 
 						break;
+						
 					case 4:
 						if((userptr + id)->target_status != 1){
 							printf("\nHarap masukan target terlebih dahulu\n\n");
@@ -232,7 +237,8 @@ int main(){
 			//end of codes block
 			//---------------------------------------------------------
 			
-			case 2: menuZakat();
+			case 2: 
+				menuZakat();
 				break;
 			case 3:
 			//---------------------------------------------------
