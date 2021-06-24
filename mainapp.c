@@ -35,6 +35,9 @@ typedef Amalan *Amalanptr;
 //end of codes block
 //----------------------------------------------------
 
+
+//This block of codes was made by Fikri Afif Musyaffa//
+//------------------------------------------------
 struct keluarga{ //struct untuk anggota keluarga waris
 
   //variabel anggota keluarga
@@ -49,7 +52,8 @@ struct keluarga{ //struct untuk anggota keluarga waris
 	int cuculk;
 	int cucupr;
 };
-
+//end of codes block
+//----------------------------------------------------
 
 
 void input_data(Amalanptr *sptr);
@@ -77,6 +81,8 @@ int menuWaris();
 void perhitungan(int harta, int warisan[10], struct keluarga keluarga, int keturunan, int saudara, int orangtua); //algoritma perhitungan harta warisan
 void list(struct keluarga keluarga); //list anggota keluarga yang mendapatkan warisan
 void display(int warisan[10]); //menampilkan hasil perhitungan harta waris
+void information();
+
 
 int main(){
 
@@ -215,7 +221,7 @@ int main(){
 						break;
 						
 					case 4:
-						//case 4 user diminta untuk memasukan 
+						//case 4 user diminta untuk memasukan hari yang ingin diremove
 						if((userptr + id)->target_status != 1){
 							printf("\nHarap masukan target terlebih dahulu\n\n");
 							system("pause");
@@ -231,6 +237,10 @@ int main(){
 						system("pause");
 						system("cls");
 						break;
+          
+          case 5:
+            information();
+            break;
 						
 				}	
 			}
@@ -246,6 +256,7 @@ int main(){
 			//case 3 (Harta Waris) was made by Fikri Afif Musyaffa
 				menuWaris();
 				break;
+      
 
 		}
 	}
@@ -259,19 +270,19 @@ int main(){
 
 //--------------------------------------------------------
 //This function was made by M. Raihan Azhari
+//fungsi untuk menginpt data amalan harian
 void input_data(Amalanptr *sptr){
 	
 //	int sks_var, kode_var, bobot_var, status_var, condition;
 //	char nilai_var;
 	
-	Amalanptr currentptr;
-	Amalanptr newptr;
-	Amalanptr prevptr;
+	Amalanptr currentptr; //pointer untuk menunjuk alamat yang sekarang
+	Amalanptr newptr; //pointer baru yang akan disisipkan
+	Amalanptr prevptr; //pointer sebelum currentptr
 	
 	newptr = malloc(sizeof(Amalan));
 	
-	//masukin kode input variabel apa aja disini
-	
+	//input ibadah harian oleh user
 	printf("\nMasukan amalan");
 	printf("\nRakaat Tahajud: ");
 	scanf("%d", &newptr->tahajud);
@@ -284,23 +295,31 @@ void input_data(Amalanptr *sptr){
 	printf("Jumlah Ayat Tahfidz: ");
 	scanf("%d", &newptr->tahfidz );
 
+  //next pointer dimasukan nilai NULL 
 	newptr->next = NULL;
 	
+  //previous pointer dijadikan NULL
 	prevptr = NULL;
 	
+  //currentptr memiliki address yang sama dengan start pointer
 	currentptr = *sptr;
 	
+  //while akan terus berjalan sampai currentptr menemukan NULL (sampai akhir pointer)
+  //loop disini bertujuan untuk mencari posisi pointer yang pas
 	while(currentptr != NULL){
 		prevptr = currentptr;
 		currentptr = currentptr->next;
 	}
 	
+  //jika listed masih kosong maka instruksi akan dijalankan
 	if (prevptr == NULL){
+    //newptr disisipkan di awal link listed
 		newptr->next = *sptr;
 		*sptr = newptr;
 	}
 	
-	else{
+  //jika link list terisi maka newptr akan disisipkan
+	else{    
 		prevptr->next = newptr;
 		newptr->next = currentptr;
 	}	
@@ -313,47 +332,47 @@ void input_data(Amalanptr *sptr){
 //This function was made by M. Raihan Azhari
 void printAmalan(Amalanptr current, int day_removed[50], User *userptr){
 	
-	//ini masih yang matkul blm gw ganti hehe
 	int counter;
-	counter = 0;
+	counter = 0; //counter di set ke-0 untuk mencegah garbage value
 	
+  //selama variabel current tidak kosong
 	while(current != NULL){
-		
+		//jika hari ke-n 0 maka print ibadah pada hari itu akan di skip
 		if(day_removed[counter] == 1){
 			printf("\n\nRekap ibadah hari ke-%d telah dihapus \n", counter + 1);
 		}
 		else{
-			
+		
+    //parallel programming
 		#pragma omp parallel
 		{
 			int tid;
 		
 			tid = omp_get_thread_num();
 			
-			#pragma omp single
+			#pragma omp single //menggunakan single thread
 			{
 				printf("\n\nRekap ibadah hari ke-%d:", counter + 1);	
 			}
 			
-			#pragma omp taskwait
+			#pragma omp taskwait //parallel taskwait menghindari race condition
 			
-			if(tid == 0){
+			if(tid == 0){ //pembagian tugas ke thread berbeda
 				printf("\nTahajud : %d Rakaat",current->tahajud);
 				printf("\nDhuha : %d Rakaat",current->dhuha);
 				printf("\nWajib : %d Waktu",current->wajib);
 			
 			}
 		
-			if (tid == 1){				
+			if (tid == 1){ //pembagian tugas ke thread berbeda
 			printf("\nTilawah : %d Halaman",current->tilawah);
 			printf("\nTahfidz : %d Ayat",current->tahfidz);
 			}
 			
-			#pragma omp taskwait
+			#pragma omp taskwait //menggunakan taskwait supaya terhindar dari race condition
 		
 		}
 	}
-	//test
 		current = current->next;
 		counter++;
 	}
@@ -373,6 +392,7 @@ void print_evaluasi(Amalanptr current, User *userptr , int day_removed[50]){
 	int counter, i;
 	int jumlah_tahajud, jumlah_dhuha, jumlah_wajib, jumlah_tilawah, jumlah_tahfidz, avg, tugas, step;
 	
+  //mengnolkan variabel
 	jumlah_tahajud = 0;
 	jumlah_dhuha = 0;
 	jumlah_wajib = 0;
@@ -380,7 +400,7 @@ void print_evaluasi(Amalanptr current, User *userptr , int day_removed[50]){
 	jumlah_tahfidz = 0;
 	counter = 0;
 	
-
+  //selama current tidak kosong, maka akan diulang terus menerus
 	while (current != NULL){
 		
 		jumlah_tahajud += current->tahajud;
@@ -395,28 +415,28 @@ void print_evaluasi(Amalanptr current, User *userptr , int day_removed[50]){
 	
 	userptr->day = counter;
 	
-	if(counter == 0){
+	if(counter == 0){ //pengecekan data
 		printf("Data masih kosong");
 	}
 	
-	else{
+	else{ //jika data telah diinput
 		printf("\n Evaluasi ibadah harian selama %d hari: ", counter);
 		tugas = 0;
 		step = 0;
 		
-		#pragma omp parallel private(tugas, step)
+		#pragma omp parallel private(tugas, step) //parallel menggunakan private
 		{
-			#pragma omp master
+			#pragma omp master //parallel menggunakan master
 			{
-				for(i = step; i < 5; i++){
+				for(i = step; i < 5; i++){ //pembagian task 5 kali
 					tugas = i;
 					step = i;
-					#pragma omp task
+					#pragma omp task //pembagian task ke thread
 					{
 						if (tugas == 0 && userptr->target_tahajud != 0){
 							float rata_tahajud = jumlah_tahajud / (float)counter;
 							float result_tahajud = rata_tahajud /(float) userptr->target_tahajud;
-							#pragma omp critical
+							#pragma omp critical //supaya terhindar dari race condition
 							{
 								printf("\n\n~~Tahajud~~ ");
 								printf("\nRata-rata Rakaat setiap harinya : %.2f", rata_tahajud);
@@ -427,7 +447,7 @@ void print_evaluasi(Amalanptr current, User *userptr , int day_removed[50]){
 						if(tugas == 1 && userptr->target_dhuha != 0){
 							float rata_dhuha = jumlah_dhuha / (float)counter;
 							float result_dhuha = rata_dhuha /(float)userptr->target_dhuha;
-							#pragma omp critical
+							#pragma omp critical //supaya terhindar dari race condition
 							{
 								printf("\n\n~~Dhuha~~ ");
 								printf("\nRata-rata Rakaat setiap harinya : %.2f", rata_dhuha);
@@ -438,7 +458,7 @@ void print_evaluasi(Amalanptr current, User *userptr , int day_removed[50]){
 						if(tugas == 2 && userptr->target_wajib != 0){
 							float rata_wajib = jumlah_wajib / (float)counter;
 							float result_wajib = rata_wajib /(float)userptr->target_wajib;
-							#pragma omp critical
+							#pragma omp critical //supaya terhindar dari race condition
 							{
 								printf("\n\n~~Sholat wajib 5 waktu~~ ");
 								printf("\nRata-rata Rakaat setiap harinya : %.2f", rata_wajib);
@@ -448,7 +468,7 @@ void print_evaluasi(Amalanptr current, User *userptr , int day_removed[50]){
 						if(tugas == 3 && userptr->target_tilawah != 0){
 							float rata_tilawah = jumlah_tilawah / (float)counter;
 							float result_tilawah = rata_tilawah /(float)userptr->target_tilawah;
-							#pragma omp critical
+							#pragma omp critical //supaya terhindar dari race condition
 							{
 								printf("\n\n~~Tilawah~~ ");
 								printf("\nRata-rata Halaman setiap harinya : %.2f", rata_tilawah);
@@ -458,7 +478,7 @@ void print_evaluasi(Amalanptr current, User *userptr , int day_removed[50]){
 						if(tugas == 4 && userptr->target_tilawah != 0){
 							float rata_tahfidz = jumlah_tahfidz / (float)counter;
 							float result_tahfidz = rata_tahfidz /(float)userptr->target_tahfidz;
-							#pragma omp critical
+							#pragma omp critical //supaya terhindar dari race condition
 							{
 									printf("\n\n~~Tahfidz~~ ");
 									printf("\nRata-rata Halaman setiap harinya : %.2f", rata_tahfidz);
@@ -469,7 +489,7 @@ void print_evaluasi(Amalanptr current, User *userptr , int day_removed[50]){
 					}
 				}
 			}
-			#pragma omp taskwait
+			#pragma omp taskwait //menunggu thread lain selesai menjalankan tugas
 		}
 	}
 }
@@ -480,8 +500,9 @@ void print_evaluasi(Amalanptr current, User *userptr , int day_removed[50]){
 //-----------------------------------------------
 //Muhammad Raihan Azhari
 void removeptr (Amalanptr *startPtr, int day, int day_removed[50]){
-	
-	Amalanptr prevPtr;
+
+  //fungsi ketiga pointer dibawah sama dengan fungsi ketiga pointer tersebut pada input_data
+	Amalanptr prevPtr; 
 	Amalanptr tempPtr;
 	Amalanptr currentPtr;
 	
@@ -489,6 +510,7 @@ void removeptr (Amalanptr *startPtr, int day, int day_removed[50]){
 	
 	day++;
 	
+  //jika hari pertama dimasukan maka pointer pertama akan diremove
 	if ( day == 0) {
  		tempPtr = *startPtr;
 		*startPtr = ( *startPtr )->next; 
@@ -497,21 +519,24 @@ void removeptr (Amalanptr *startPtr, int day, int day_removed[50]){
  	else {
  		prevPtr = *startPtr;
  		currentPtr = ( *startPtr )->next;
- 
+    //pencarian hari yang akan di remove menggunakan for loop
  		for(i = 1; i < day; i++){
  			
+       //error handling terhadap hari yang akan dihapus
  			if(day_removed[i]== 1){
  				continue;
 			 }
  			
+      //jika hari pada iterasi menemukan hari yang dimaksud
  			if (i == day) {
 		 		tempPtr = currentPtr;
 		 		prevPtr->next = currentPtr->next;
 		 		free( tempPtr );
 		 	} 
+       //next ke list selanjutnya
  			prevPtr = currentPtr; 
  			currentPtr = currentPtr->next;
-		
+  //jika currenptr bernilai NULL maka sudah mencapai link terakhir dan loop dihentikan
 		 	if(currentPtr == NULL) {
 			 	break;
 			 }
@@ -525,20 +550,20 @@ void removeptr (Amalanptr *startPtr, int day, int day_removed[50]){
 int file_user_read (User *userptr, int day_removed[50]){
 	
 	FILE *fptr;
-	
+	//membaca file "userMuslim.txt"
 	fptr = fopen("userMuslim.txt", "r");
 	
+  //jika tidak ada, maka membuat file baru bernama "userMuslim.txt"
 	if(fptr == NULL){
-	//	printf("\nFile user belmu dibuat");
 		fclose(fptr);
 		fptr = fopen("userMuslim.txt", "w");
-		fclose(fptr);
+		fclose(fptr); //menutup file
 		return 0;
 	}
 	else{	
 		fseek(fptr, 0, SEEK_SET);
-	//	printf("\nFile sudah dibuat");
-		fscanf(fptr, "\n%s", &userptr->nama);
+	  //printf("\nFile sudah dibuat");
+    fscanf(fptr, "\n%s", &userptr->nama);
 		fscanf(fptr, "\n%d", &userptr->target_status);
 		fscanf(fptr, "\n%d", &userptr->target_tahajud);
 		fscanf(fptr, "\n%d", &userptr->target_dhuha);
@@ -547,7 +572,7 @@ int file_user_read (User *userptr, int day_removed[50]){
 		fscanf(fptr, "\n%d", &userptr->target_tahfidz);
 		fscanf(fptr, "\n%d", &userptr->day);
 	}
-	fclose(fptr);
+	fclose(fptr); //menutup file "userMuslim.txt"
 	return 1;
 }
 //--------------------------------------------------
@@ -558,7 +583,7 @@ int file_user_read (User *userptr, int day_removed[50]){
 int file_user_write (User *userptr, int day_removed[50]){
 	
 	FILE *fptr;
-	
+	//menulis ke file "userMuslim.txt"
 	fptr = fopen("userMuslim.txt", "w");
 	
 	fprintf(fptr, "\n%s", userptr->nama);
@@ -569,7 +594,8 @@ int file_user_write (User *userptr, int day_removed[50]){
 	fprintf(fptr, "\n%d", userptr->target_tilawah);
 	fprintf(fptr, "\n%d", userptr->target_tahfidz);
 	fprintf(fptr, "\n%d", userptr->day);
-	fclose(fptr);
+	
+  fclose(fptr); //menutup file "userMuslim.txt"
 }
 
 //---------------------------------------------------
@@ -579,40 +605,43 @@ int file_user_write (User *userptr, int day_removed[50]){
 //M. Raihan Azhari
 int file_amalan_read (Amalanptr *sptr, int day_removed[50], int i, int *posisi){
 	
+  //File didieklarasikan dalam pointer fptr
 	FILE *fptr;
 	
 	
 	int tahajud_var, dhuha_var, wajib_var, tilawah_var, tahfidz_var;
-		
-	Amalanptr currentptr;
-	Amalanptr newptr;
-	Amalanptr prevptr;
+	
+	Amalanptr currentptr; //pointer menunjukan address link listed kondisi terkini
+	Amalanptr newptr; //pointer berisikan list baru yang akan disisipkan
+	Amalanptr prevptr; //pointer sebelumnya yang menunjuk ke currentptr
 	
 	newptr = malloc(sizeof(Amalan));
 	
+  //membuka file pada iterasi pertama untuk emngecek apakah file telah dibuat atau belum
 	if(i == 0){
 		fptr = fopen("amalan.txt", "r");
 	}
-	
+	//jika file masih kosong (belum dibuat)
 	if(fptr == NULL){
-	//	printf("\nFile amalan belmu dibuat");
+    //menutup file yang telah dibuka pada if(i == 0) untuk dibuka dalam keadaan write
 		fclose(fptr);
 		fptr = fopen("userMuslim.txt", "w");
 		fclose(fptr);
 		return 0;
 	}
 	
+  //jika file sudah ada
 	else{
+    //jika file sudah ada dan pada iterasi pertama maka posisi akan di set ke awal pembacaan file
 		if(i == 0){
 			fseek(fptr, 0, SEEK_SET);
 		}
-		
+		//jika file sudah ada dan pada iterasi bukan pertama maka posisi akan di set ke posisi terakhir
 		else{
 			fseek(fptr,  0 , SEEK_CUR);
 		}
-	//	printf("\nFile sudah dibuat");
-		
-		
+
+    //memasukan nilai 	
 		fscanf(fptr,"\n%d",&newptr->tahajud);
 		fscanf(fptr,"\n%d",&newptr->dhuha);
 		fscanf(fptr,"\n%d",&newptr->wajib);
@@ -656,9 +685,10 @@ int file_amalan_write (Amalanptr current, int day_removed[50]){
 	FILE *fptr;
 	
 	fptr = fopen("amalan.txt", "w");
-	
+	//membuka dan menulis file "amalan.txt"
 	while (current != NULL){
 		
+    //menulis ke file "amalan.txt"
 		fprintf(fptr,"\n%d",current->tahajud);
 		fprintf(fptr,"\n%d",current->dhuha);
 		fprintf(fptr,"\n%d",current->wajib);
@@ -669,85 +699,98 @@ int file_amalan_write (Amalanptr current, int day_removed[50]){
 	}
 	
 	fclose(fptr);
-	
+	//menutup file "amalan.txt"
 }
 //---------------------------------------------------
 
 
-void welcome(User *userptr){
+//---------------------------------------------------
+//Fikri Afif Musyaffa
+void welcome(User *userptr){ //fungsi menu awal program
 	
 	int i, tid;
 	
-	
-	#pragma omp for
+	#pragma omp for //parallel menggunakan for
 	for(i = 0; i < 60; i++){
 		printf("-");
 	}
 	
 	printf("\n\t\t\t Mu'min Pro\n");
-	#pragma omp for
+	#pragma omp for //pakai multithreads supaya lebih hemat waktu
 	for(i = 0; i < 60 ;i++){
 		printf("-");
 	}
-	
+	//menu awal berisi 3 fitur utama
 	printf("\nAssalamu'alaikum %s", (userptr)->nama);
 	printf("\n\nMode Menu Mutabaah: ");
 	printf("\n1. Mutaba'ah Yaumiah (Evaluasi Ibadah Harian)");
 	printf("\n2. untuk Kalkulator Perhitungan Zakat");
 	printf("\n3. untuk Kalkulator Perhitungan Waris\n\n" );
+  printf("\n4. Menghapus Ibadah Harian");
+  printf("\n5. Untuk aturan penggunaan program");
 	printf("\n-1 Untuk keluar program");
 }
+//---------------------------------------------------
 
+
+//---------------------------------------------------
+//Fikri Afif Musyaffa
 void help_mutabaah(){
-	
-	printf("\n1. Input Target Mutabaah");
+	//menu mutabaah yaumiyah
+	printf("\n1. Input / Ubah Target Mutabaah");
 	printf("\n2. Input Ibadah Harian");
 	printf("\n3. Lihat Evaluasi Ibadah Harian");
 	printf("\n4. Menghapus Ibadah Harian");
+  printf("\n5. Untuk aturan penggunaan program");
 	printf("\n-1 Untuk keluar program");
-	
 }
 
-int file_removed_write(int day[50]){
+int file_removed_write(int day[50]){ //fungsi untuk menghapus hari
 	
 	FILE *fptr;
-	
+  
+  //membuka file "removeday.txt"
 	fptr = fopen("removeday.txt", "w");
 	
 	int i;
-	
+  
+  //menghapus hari mutabaah
 	for(i = 0; i < 50; i++){
 		fprintf(fptr, "\n%d", day[i]);
 	}
-	
+	//menutup file "removeday.txt"
 	fclose(fptr);
 	
 }
+//---------------------------------------------------
 
 
+//---------------------------------------------------
+//Fikri Afif Musyaffa
 int file_removed_read(int day[50]){
 	
 	FILE *fptr;
-	
+	//membuka file "removeday.txt"
 	fptr = fopen("removeday.txt", "r");
 	
-	if (fptr == NULL){
+	if (fptr == NULL){ //jika tidak ada file tersebut, maka bikin file baru
 		fclose(fptr);
 		fptr = fopen("removeday.txt", "w");
 		fclose (fptr);
 		return 0;
 	}
 	
-	else{
+	else{ //jika file sudah ada
 		int i;
-		
+		//menghapus hari
 		for(i = 0 ; i < 50; i++){
 			fscanf(fptr, "\n%d", &day[i]);
 		}
 		return 1;
-	}
-	
+	}	
 }
+//---------------------------------------------------
+
 
 //This block of codes made by Muhammad Taqiy Nur Furqon// 
 //----------------------------------------------------
@@ -972,6 +1015,8 @@ void petunjuk_zakatMaal() {
 
 //--------------------------------------------------------
 //This function was made by Fikri Afif Musyaffa
+
+//function menu waris
 int menuWaris(){
 	
 	struct keluarga keluarga; //mendefinisikan struct keluarga
@@ -992,149 +1037,150 @@ int menuWaris(){
     printf("\nJika pewaris perempuan, masukkan angka 2");
     printf("\nMasukkan angka : ");
     scanf("%d", &pewaris);
-        
-        while(pewaris != 1 || pewaris != 2){ //error handling menentukan istri dan suami
-          if(pewaris == 1){ //jika pewaris adalah laki-laki
-            keluarga.suami = 0; //laki-laki yang meninggal, maka dia tidak mendapatkan harta
-            printf("\n\nApakah pewaris memiliki istri yang masih hidup?");
-            printf("\nJika iya, masukkan angka 1");
-            printf("\nJika tidak, masukkan angka 0");
-            printf("\n\nMasukkan angka : ");
+    
+    while(pewaris != 1 || pewaris != 2){ //error handling menentukan istri dan suami
+      if(pewaris == 1){ //jika pewaris adalah laki-laki
+        keluarga.suami = 0; //laki-laki yang meninggal, maka dia tidak mendapatkan harta
+        printf("\n\nApakah pewaris memiliki istri yang masih hidup?");
+        printf("\nJika iya, masukkan angka 1");
+        printf("\nJika tidak, masukkan angka 0");
+        printf("\n\nMasukkan angka : ");
+        scanf("%d", &keluarga.istri);
+          if(keluarga.istri == 1){
+            system("cls");
+            printf("Masukkan jumlah istri yang masih hidup : "); //kemungkinan istri lebih dari 1
             scanf("%d", &keluarga.istri);
-            if(keluarga.istri == 1){
-              system("cls");
-              printf("Masukkan jumlah istri yang masih hidup : "); //kemungkinan istri lebih dari 1
-              scanf("%d", &keluarga.istri);
-              break;
-            }
-            else if(keluarga.istri == 0){ //jika istrinya sudah meninggal lebih dulu
-              break;
-            }
-            else{
-              printf("\nMasukkan angka dengan benar !\n\n"); //error handling pewaris laki-laki
-            }
-          }
-          else if(pewaris == 2){ //jika pewaris adalah perempuan
-            keluarga.istri = 0; //perempuan yang meninggal, maka dia tidak mendapatkan harta
-            printf("Apakah pewaris memiliki suami yang masih hidup?");
-            printf("\nJika iya, masukkan angka 1");
-            printf("\nJika tidak, masukkan angka 0");
-            printf("\n\nMasukkan angka : ");
-            scanf("%d", &keluarga.suami);
-            if(keluarga.suami == 1 || keluarga.suami == 0){ //meminta data apakah suami pewaris masih hidup atau sudah meninggal
-              break;
-            }
-            else{
-              printf("\nMasukkan angka dengan benar !\n\n"); //error handling pewaris perempuan
-            }
-          }
-          else{
-            printf("Masukkan angka dengan benar ! : "); //error handling pewaris perempuan
-            scanf("%d", &pewaris);
-          }
-        }
-        system("cls");
-        printf("Apakah pewaris memiliki keturunan yang masih hidup?");
-        printf("\nJika iya, masukkan angka 1");
-        printf("\nJika tidak, masukkan angka 0");
-        printf("\n\nMasukkan angka : ");
-        scanf("%d", &keturunan); //cek apakah pewaris memiliki keturunan yang masih hidup
-        while(keturunan != 1 || keturunan != 0){ //error handling untuk anak dan cucu
-          if(keturunan == 1){ //meminta data anak dan cucu jika ada
-            system("cls");
-            printf("Masukkan jumlah anak laki-laki : ");
-            scanf("%d", &keluarga.anaklk);
-            printf("Masukkan jumlah anak perempuan : ");
-            scanf("%d", &keluarga.anakpr);
-            printf("Masukkan jumlah cucu laki-laki : ");
-            scanf("%d", &keluarga.cuculk);
-            printf("Masukkan jumlah cucu perempuan : ");
-            scanf("%d", &keluarga.cucupr);
             break;
           }
-          else if(keturunan == 0){ //mengosongkan semua variabel anak dan cucu
-            keluarga.anaklk = 0;
-            keluarga.anakpr = 0;
-            keluarga.cuculk = 0;
-            keluarga.cucupr = 0;
+          else if(keluarga.istri == 0){ //jika istrinya sudah meninggal lebih dulu
             break;
           }
           else{
-            printf("Masukkan angka dengan benar ! : "); //error handling untuk anak dan cucu
-            scanf("%d", &keturunan);
+            printf("\nMasukkan angka dengan benar !\n\n"); //error handling pewaris laki-laki
           }
         }
-        system("cls");
-        printf("Apakah pewaris memiliki saudara/i yang masih hidup?");
-        printf("\nJika iya, masukkan angka 1");
-        printf("\nJika tidak, masukkan angka 0");
-        printf("\n\nMasukkan angka : ");
-        scanf("%d", &saudara); //cek apakah pewaris memilki saudara kandung yang masih hidup
-        while(saudara != 1 || saudara != 0){ //error handling menentukan saudara
-          if(saudara == 1){ //meminta data jumlah saudara
-            system("cls");
-            printf("Masukkan jumlah saudara laki-laki : ");
-            scanf("%d", &keluarga.sdrlk);
-            printf("Masukkan jumlah saudara perempuan : ");
-            scanf("%d", &keluarga.sdrpr);
-            break;
-          }
-          else if(saudara == 0){ //mengosongkan semua variabel saudara
-            keluarga.sdrlk = 0;
-            keluarga.sdrpr = 0;
+        else if(pewaris == 2){ //jika pewaris adalah perempuan
+          keluarga.istri = 0; //perempuan yang meninggal, maka dia tidak mendapatkan harta
+          printf("Apakah pewaris memiliki suami yang masih hidup?");
+          printf("\nJika iya, masukkan angka 1");
+          printf("\nJika tidak, masukkan angka 0");
+          printf("\n\nMasukkan angka : ");
+          scanf("%d", &keluarga.suami);
+          if(keluarga.suami == 1 || keluarga.suami == 0){ //meminta data apakah suami pewaris masih hidup atau sudah meninggal
             break;
           }
           else{
-            printf("Masukkan angka dengan benar ! : "); //error handling saudara
-            scanf("%d", &saudara);
+            printf("\nMasukkan angka dengan benar !\n\n"); //error handling pewaris perempuan
           }
         }
-        system("cls");
-        printf("Apakah pewaris memiliki orang tua yang masih hidup?");
-        printf("\nJika iya, masukkan angka 1");
-        printf("\nJika tidak, masukkan angka 0");
-        printf("\n\nMasukkan angka : ");
-        scanf("%d", &orangtua); //cek kondisi apakah pewaris memiliki orang tua yang masih hidup
-        while(orangtua != 0 || orangtua != 1){ //error handling untuk orang tua pewaris
-          if(orangtua == 1){ //meminta data orang tua
-            printf("\n1. Bapak");
-            printf("\n2. Ibu");
-            printf("\n3. Keduanya");
-            printf("\n\nMasukkan angka : ");
-            scanf("%d", &pilih);
-            if(pilih == 1){ //bapak masih hidup
-              keluarga.bapak = 1;
-              keluarga.ibu = 0;
-              break;
-            }
-            else if(pilih == 2){ //ibu masih hidup
-              keluarga.bapak = 0;
-              keluarga.ibu = 1;
-              break;
-            }
-            else if(pilih == 3){ //kedua orang tua masih hidup
-              keluarga.bapak = 1;
-              keluarga.ibu = 1;
-              break;
-            }
-            else{
-              printf("\nMasukkan angka dengan benar !\n\n"); //error handling untuk orang tua pewaris
-            }
-          }
-          else if(orangtua == 0){ //keduanya telah tiada
-            keluarga.bapak = 0;
+        else{
+          printf("Masukkan angka dengan benar ! : "); //error handling pewaris perempuan
+          scanf("%d", &pewaris);
+        }
+      }
+      system("cls");
+      printf("Apakah pewaris memiliki keturunan yang masih hidup?");
+      printf("\nJika iya, masukkan angka 1");
+      printf("\nJika tidak, masukkan angka 0");
+      printf("\n\nMasukkan angka : ");
+      scanf("%d", &keturunan); //cek apakah pewaris memiliki keturunan yang masih hidup
+      while(keturunan != 1 || keturunan != 0){ //error handling untuk anak dan cucu
+        if(keturunan == 1){ //meminta data anak dan cucu jika ada
+          system("cls");
+          printf("Masukkan jumlah anak laki-laki : ");
+          scanf("%d", &keluarga.anaklk);
+          printf("Masukkan jumlah anak perempuan : ");
+          scanf("%d", &keluarga.anakpr);
+          printf("Masukkan jumlah cucu laki-laki : ");
+          scanf("%d", &keluarga.cuculk);
+          printf("Masukkan jumlah cucu perempuan : ");
+          scanf("%d", &keluarga.cucupr);
+          break;
+        }
+        else if(keturunan == 0){ //mengosongkan semua variabel anak dan cucu
+          keluarga.anaklk = 0;
+          keluarga.anakpr = 0;
+          keluarga.cuculk = 0;
+          keluarga.cucupr = 0;
+          break;
+        }
+        else{
+          printf("Masukkan angka dengan benar ! : "); //error handling untuk anak dan cucu
+          scanf("%d", &keturunan);
+        }
+      }
+      system("cls");
+      printf("Apakah pewaris memiliki saudara/i yang masih hidup?");
+      printf("\nJika iya, masukkan angka 1");
+      printf("\nJika tidak, masukkan angka 0");
+      printf("\n\nMasukkan angka : ");
+      scanf("%d", &saudara); //cek apakah pewaris memilki saudara kandung yang masih hidup
+      while(saudara != 1 || saudara != 0){ //error handling menentukan saudara
+        if(saudara == 1){ //meminta data jumlah saudara
+          system("cls");
+          printf("Masukkan jumlah saudara laki-laki : ");
+          scanf("%d", &keluarga.sdrlk);
+          printf("Masukkan jumlah saudara perempuan : ");
+          scanf("%d", &keluarga.sdrpr);
+          break;
+        }
+        else if(saudara == 0){ //mengosongkan semua variabel saudara
+          keluarga.sdrlk = 0;
+          keluarga.sdrpr = 0;
+          break;
+        }
+        else{
+          printf("Masukkan angka dengan benar ! : "); //error handling saudara
+          scanf("%d", &saudara);
+        }
+      }
+      system("cls");
+      printf("Apakah pewaris memiliki orang tua yang masih hidup?");
+      printf("\nJika iya, masukkan angka 1");
+      printf("\nJika tidak, masukkan angka 0");
+      printf("\n\nMasukkan angka : ");
+      scanf("%d", &orangtua); //cek kondisi apakah pewaris memiliki orang tua yang masih hidup
+      while(orangtua != 0 || orangtua != 1){ //error handling untuk orang tua pewaris
+        if(orangtua == 1){ //meminta data orang tua
+          printf("\n1. Bapak");
+          printf("\n2. Ibu");
+          printf("\n3. Keduanya");
+          printf("\n\nMasukkan angka : ");
+          scanf("%d", &pilih);
+          if(pilih == 1){ //bapak masih hidup
+            keluarga.bapak = 1;
             keluarga.ibu = 0;
             break;
           }
+          else if(pilih == 2){ //ibu masih hidup
+            keluarga.bapak = 0;
+            keluarga.ibu = 1;
+            break;
+          }
+          else if(pilih == 3){ //kedua orang tua masih hidup
+            keluarga.bapak = 1;
+            keluarga.ibu = 1;
+            break;
+          }
           else{
-            printf("Masukkan angka dengan benar ! : "); //error handling orang tua
-            scanf("%d", &orangtua);
+            printf("\nMasukkan angka dengan benar !\n\n"); //error handling untuk orang tua pewaris
           }
         }
-        
-        perhitungan(harta, warisan, keluarga, keturunan, saudara, orangtua); //algoritma perhitungan harta warisan
-        list(keluarga); //list anggota keluarga yang mendapatkan warisan
-        display(warisan); //menampilkan hasil perhitungan harta waris
+        else if(orangtua == 0){ //keduanya telah tiada
+          keluarga.bapak = 0;
+          keluarga.ibu = 0;
+          break;
+        }
+        else{
+          printf("Masukkan angka dengan benar ! : "); //error handling orang tua
+          scanf("%d", &orangtua);
+        }
+      }
+      perhitungan(harta, warisan, keluarga, keturunan, saudara, orangtua); //algoritma perhitungan harta warisan
+      list(keluarga); //list anggota keluarga yang mendapatkan warisan
+      display(warisan); //menampilkan hasil perhitungan harta waris
+      system("pause");
+      system("cls");
 		
 			//end of codes block
 			//---------------------------------------------------------
@@ -1185,7 +1231,7 @@ void perhitungan(int harta, int warisan[10], struct keluarga keluarga, int ketur
 	}
 	sisa = harta - (warisan[1] * keluarga.istri); //sisa harta setelah istri mendapatkan warisan
 	
-	int tugas = 0;
+	int tugas = 0; //variabel untuk for loop
 	
 	#pragma omp parallel private (tugas) //parallel programming menggunakan private threads
 	{
@@ -1372,3 +1418,25 @@ void display(int warisan[10]){ //menampilkan harta yang telah dibagi sesuai atur
 
 //end of codes block
 //--------------------------------------------------------
+
+
+//petunjuk penggunaan program
+void information (){
+  system("cls");
+  printf("Petunjuk penggunaan program: ");
+  #pragma omp parallel
+  {
+    int tid;
+
+    if(tid == 0){ //pembagian tugas ke thread
+      printf("\nHarap masukan menu 1 (target) terlebih dahulu sebelum masuk ke menu selanjutnya");
+      printf("\nJika anda ingin kembali ke menu utama atau mengakhiri program harap tekan - 1");
+    }
+
+    if(tid == 1){ //pembagian tugas ke thread
+      printf("\nAnda dapat mengubah target amalan atau identitas dengan menu 1");
+      printf("\nPastikan anda selalu menekan -1 untuk mengakhiri program supaya data anda tersimpan");
+    }
+  }
+}
+
