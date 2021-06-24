@@ -71,6 +71,7 @@ void petunjuk_zakatPenghasilan();
 void petunjuk_zakatMaal();
 int jumlah(int x[], int n, int i);
 int zakat(int * x, int y);
+int menuWaris();
 void perhitungan(int harta, int warisan[10], struct keluarga keluarga, int keturunan, int saudara, int orangtua); //algoritma perhitungan harta warisan
 void list(struct keluarga keluarga); //list anggota keluarga yang mendapatkan warisan
 void display(int warisan[10]); //menampilkan hasil perhitungan harta waris
@@ -81,10 +82,6 @@ int main(){
 	
 	int menu, day, i, j, id_input,id, mutabaah, status, login, login_status, file_status, posisi;
 	int day_removed[50] = {}; //array untuk mengetahui hari yang telah di remove
-	struct keluarga keluarga; //mendefinisikan struct keluarga
-	int warisan[10]; //isi harta warisan yang diterima masing-masing anggota keluarga
-	int harta, hutang; //total harta yang diwarisi
-	int pewaris, keturunan, saudara, orangtua, pilih; //variabel cek kondisi 
 	
 	//set variabel ke 0 untuk mencegah adanya garbage value
 	menu = 0;
@@ -231,8 +228,7 @@ int main(){
 						system("pause");
 						system("cls");
 						
-				}
-					
+				}	
 			}
 			//end of codes block
 			//---------------------------------------------------------
@@ -240,169 +236,12 @@ int main(){
 			case 2: 
 				menuZakat();
 				break;
-			case 3:
+			case 3: 
 			//---------------------------------------------------
 			//case 3 (Harta Waris) was made by Fikri Afif Musyaffa
-
-        printf("Perhitungan Waris\n");
-        printf("\nMasukkan total harta yang ditinggalkan Pewaris : ");
-        scanf("%d", &harta); //harta awal pewaris
-        printf("Masukkan total hutang yang ditinggalkan Pewaris : ");
-        scanf("%d", &hutang); //jika pewaris memiliki hutang yang belum terbayar
-        harta = harta - hutang; //harta akhir pewaris setelah hutang terbayarkan
-        printf("\nTotal harta : Rp. %d\n\n", harta);
-        system("pause");
-        system("cls");
-        printf("Jika pewaris laki-laki, masukkan angka 1");
-        printf("\nJika pewaris perempuan, masukkan angka 2");
-        printf("\nMasukkan angka : ");
-        scanf("%d", &pewaris);
-        
-        while(pewaris != 1 || pewaris != 2){ //error handling menentukan istri dan suami
-          if(pewaris == 1){ //jika pewaris adalah laki-laki
-            keluarga.suami = 0; //laki-laki yang meninggal, maka dia tidak mendapatkan harta
-            printf("\n\nApakah pewaris memiliki istri yang masih hidup?");
-            printf("\nJika iya, masukkan angka 1");
-            printf("\nJika tidak, masukkan angka 0");
-            printf("\n\nMasukkan angka : ");
-            scanf("%d", &keluarga.istri);
-            if(keluarga.istri == 1){
-              system("cls");
-              printf("Masukkan jumlah istri yang masih hidup : "); //kemungkinan istri lebih dari 1
-              scanf("%d", &keluarga.istri);
-              break;
-            }
-            else if(keluarga.istri == 0){ //jika istrinya sudah meninggal lebih dulu
-              break;
-            }
-            else{
-              printf("\nMasukkan angka dengan benar !\n\n"); //error handling pewaris laki-laki
-            }
-          }
-          else if(pewaris == 2){ //jika pewaris adalah perempuan
-            keluarga.istri = 0; //perempuan yang meninggal, maka dia tidak mendapatkan harta
-            printf("Apakah pewaris memiliki suami yang masih hidup?");
-            printf("\nJika iya, masukkan angka 1");
-            printf("\nJika tidak, masukkan angka 0");
-            printf("\n\nMasukkan angka : ");
-            scanf("%d", &keluarga.suami);
-            if(keluarga.suami == 1 || keluarga.suami == 0){ //meminta data apakah suami pewaris masih hidup atau sudah meninggal
-              break;
-            }
-            else{
-              printf("\nMasukkan angka dengan benar !\n\n"); //error handling pewaris perempuan
-            }
-          }
-          else{
-            printf("Masukkan angka dengan benar ! : "); //error handling pewaris perempuan
-            scanf("%d", &pewaris);
-          }
-        }
-        system("cls");
-        printf("Apakah pewaris memiliki keturunan yang masih hidup?");
-        printf("\nJika iya, masukkan angka 1");
-        printf("\nJika tidak, masukkan angka 0");
-        printf("\n\nMasukkan angka : ");
-        scanf("%d", &keturunan); //cek apakah pewaris memiliki keturunan yang masih hidup
-        while(keturunan != 1 || keturunan != 0){ //error handling untuk anak dan cucu
-          if(keturunan == 1){ //meminta data anak dan cucu jika ada
-            system("cls");
-            printf("Masukkan jumlah anak laki-laki : ");
-            scanf("%d", &keluarga.anaklk);
-            printf("Masukkan jumlah anak perempuan : ");
-            scanf("%d", &keluarga.anakpr);
-            printf("Masukkan jumlah cucu laki-laki : ");
-            scanf("%d", &keluarga.cuculk);
-            printf("Masukkan jumlah cucu perempuan : ");
-            scanf("%d", &keluarga.cucupr);
-            break;
-          }
-          else if(keturunan == 0){ //mengosongkan semua variabel anak dan cucu
-            keluarga.anaklk = 0;
-            keluarga.anakpr = 0;
-            keluarga.cuculk = 0;
-            keluarga.cucupr = 0;
-            break;
-          }
-          else{
-            printf("Masukkan angka dengan benar ! : "); //error handling untuk anak dan cucu
-            scanf("%d", &keturunan);
-          }
-        }
-        system("cls");
-        printf("Apakah pewaris memiliki saudara/i yang masih hidup?");
-        printf("\nJika iya, masukkan angka 1");
-        printf("\nJika tidak, masukkan angka 0");
-        printf("\n\nMasukkan angka : ");
-        scanf("%d", &saudara); //cek apakah pewaris memilki saudara kandung yang masih hidup
-        while(saudara != 1 || saudara != 0){ //error handling menentukan saudara
-          if(saudara == 1){ //meminta data jumlah saudara
-            system("cls");
-            printf("Masukkan jumlah saudara laki-laki : ");
-            scanf("%d", &keluarga.sdrlk);
-            printf("Masukkan jumlah saudara perempuan : ");
-            scanf("%d", &keluarga.sdrpr);
-            break;
-          }
-          else if(saudara == 0){ //mengosongkan semua variabel saudara
-            keluarga.sdrlk = 0;
-            keluarga.sdrpr = 0;
-            break;
-          }
-          else{
-            printf("Masukkan angka dengan benar ! : "); //error handling saudara
-            scanf("%d", &saudara);
-          }
-        }
-        system("cls");
-        printf("Apakah pewaris memiliki orang tua yang masih hidup?");
-        printf("\nJika iya, masukkan angka 1");
-        printf("\nJika tidak, masukkan angka 0");
-        printf("\n\nMasukkan angka : ");
-        scanf("%d", &orangtua); //cek kondisi apakah pewaris memiliki orang tua yang masih hidup
-        while(orangtua != 0 || orangtua != 1){ //error handling untuk orang tua pewaris
-          if(orangtua == 1){ //meminta data orang tua
-            printf("\n1. Bapak");
-            printf("\n2. Ibu");
-            printf("\n3. Keduanya");
-            printf("\n\nMasukkan angka : ");
-            scanf("%d", &pilih);
-            if(pilih == 1){ //bapak masih hidup
-              keluarga.bapak = 1;
-              keluarga.ibu = 0;
-              break;
-            }
-            else if(pilih == 2){ //ibu masih hidup
-              keluarga.bapak = 0;
-              keluarga.ibu = 1;
-              break;
-            }
-            else if(pilih == 3){ //kedua orang tua masih hidup
-              keluarga.bapak = 1;
-              keluarga.ibu = 1;
-              break;
-            }
-            else{
-              printf("\nMasukkan angka dengan benar !\n\n"); //error handling untuk orang tua pewaris
-            }
-          }
-          else if(orangtua == 0){ //keduanya telah tiada
-            keluarga.bapak = 0;
-            keluarga.ibu = 0;
-            break;
-          }
-          else{
-            printf("Masukkan angka dengan benar ! : "); //error handling orang tua
-            scanf("%d", &orangtua);
-          }
-        }
-        
-        perhitungan(harta, warisan, keluarga, keturunan, saudara, orangtua); //algoritma perhitungan harta warisan
-        list(keluarga); //list anggota keluarga yang mendapatkan warisan
-        display(warisan); //menampilkan hasil perhitungan harta waris
+				menuWaris();
 				break;
-			//end of codes block
-			//---------------------------------------------------------
+
 		}
 	}
 	
@@ -1127,6 +966,177 @@ void petunjuk_zakatMaal() {
 
 //end of codes block
 //--------------------------------------------------------
+
+
+//--------------------------------------------------------
+//This function was made by Fikri Afif Musyaffa
+int menuWaris(){
+	
+	struct keluarga keluarga; //mendefinisikan struct keluarga
+	int warisan[10]; //isi harta warisan yang diterima masing-masing anggota keluarga
+	int harta, hutang; //total harta yang diwarisi
+	int pewaris, keturunan, saudara, orangtua, pilih; //variabel cek kondisi 
+
+    printf("Perhitungan Waris\n");
+    printf("\nMasukkan total harta yang ditinggalkan Pewaris : ");
+    scanf("%d", &harta); //harta awal pewaris
+    printf("Masukkan total hutang yang ditinggalkan Pewaris : ");
+	scanf("%d", &hutang); //jika pewaris memiliki hutang yang belum terbayar
+    harta = harta - hutang; //harta akhir pewaris setelah hutang terbayarkan
+    printf("\nTotal harta : Rp. %d\n\n", harta);
+    system("pause");
+    system("cls");
+    printf("Jika pewaris laki-laki, masukkan angka 1");
+    printf("\nJika pewaris perempuan, masukkan angka 2");
+    printf("\nMasukkan angka : ");
+    scanf("%d", &pewaris);
+        
+        while(pewaris != 1 || pewaris != 2){ //error handling menentukan istri dan suami
+          if(pewaris == 1){ //jika pewaris adalah laki-laki
+            keluarga.suami = 0; //laki-laki yang meninggal, maka dia tidak mendapatkan harta
+            printf("\n\nApakah pewaris memiliki istri yang masih hidup?");
+            printf("\nJika iya, masukkan angka 1");
+            printf("\nJika tidak, masukkan angka 0");
+            printf("\n\nMasukkan angka : ");
+            scanf("%d", &keluarga.istri);
+            if(keluarga.istri == 1){
+              system("cls");
+              printf("Masukkan jumlah istri yang masih hidup : "); //kemungkinan istri lebih dari 1
+              scanf("%d", &keluarga.istri);
+              break;
+            }
+            else if(keluarga.istri == 0){ //jika istrinya sudah meninggal lebih dulu
+              break;
+            }
+            else{
+              printf("\nMasukkan angka dengan benar !\n\n"); //error handling pewaris laki-laki
+            }
+          }
+          else if(pewaris == 2){ //jika pewaris adalah perempuan
+            keluarga.istri = 0; //perempuan yang meninggal, maka dia tidak mendapatkan harta
+            printf("Apakah pewaris memiliki suami yang masih hidup?");
+            printf("\nJika iya, masukkan angka 1");
+            printf("\nJika tidak, masukkan angka 0");
+            printf("\n\nMasukkan angka : ");
+            scanf("%d", &keluarga.suami);
+            if(keluarga.suami == 1 || keluarga.suami == 0){ //meminta data apakah suami pewaris masih hidup atau sudah meninggal
+              break;
+            }
+            else{
+              printf("\nMasukkan angka dengan benar !\n\n"); //error handling pewaris perempuan
+            }
+          }
+          else{
+            printf("Masukkan angka dengan benar ! : "); //error handling pewaris perempuan
+            scanf("%d", &pewaris);
+          }
+        }
+        system("cls");
+        printf("Apakah pewaris memiliki keturunan yang masih hidup?");
+        printf("\nJika iya, masukkan angka 1");
+        printf("\nJika tidak, masukkan angka 0");
+        printf("\n\nMasukkan angka : ");
+        scanf("%d", &keturunan); //cek apakah pewaris memiliki keturunan yang masih hidup
+        while(keturunan != 1 || keturunan != 0){ //error handling untuk anak dan cucu
+          if(keturunan == 1){ //meminta data anak dan cucu jika ada
+            system("cls");
+            printf("Masukkan jumlah anak laki-laki : ");
+            scanf("%d", &keluarga.anaklk);
+            printf("Masukkan jumlah anak perempuan : ");
+            scanf("%d", &keluarga.anakpr);
+            printf("Masukkan jumlah cucu laki-laki : ");
+            scanf("%d", &keluarga.cuculk);
+            printf("Masukkan jumlah cucu perempuan : ");
+            scanf("%d", &keluarga.cucupr);
+            break;
+          }
+          else if(keturunan == 0){ //mengosongkan semua variabel anak dan cucu
+            keluarga.anaklk = 0;
+            keluarga.anakpr = 0;
+            keluarga.cuculk = 0;
+            keluarga.cucupr = 0;
+            break;
+          }
+          else{
+            printf("Masukkan angka dengan benar ! : "); //error handling untuk anak dan cucu
+            scanf("%d", &keturunan);
+          }
+        }
+        system("cls");
+        printf("Apakah pewaris memiliki saudara/i yang masih hidup?");
+        printf("\nJika iya, masukkan angka 1");
+        printf("\nJika tidak, masukkan angka 0");
+        printf("\n\nMasukkan angka : ");
+        scanf("%d", &saudara); //cek apakah pewaris memilki saudara kandung yang masih hidup
+        while(saudara != 1 || saudara != 0){ //error handling menentukan saudara
+          if(saudara == 1){ //meminta data jumlah saudara
+            system("cls");
+            printf("Masukkan jumlah saudara laki-laki : ");
+            scanf("%d", &keluarga.sdrlk);
+            printf("Masukkan jumlah saudara perempuan : ");
+            scanf("%d", &keluarga.sdrpr);
+            break;
+          }
+          else if(saudara == 0){ //mengosongkan semua variabel saudara
+            keluarga.sdrlk = 0;
+            keluarga.sdrpr = 0;
+            break;
+          }
+          else{
+            printf("Masukkan angka dengan benar ! : "); //error handling saudara
+            scanf("%d", &saudara);
+          }
+        }
+        system("cls");
+        printf("Apakah pewaris memiliki orang tua yang masih hidup?");
+        printf("\nJika iya, masukkan angka 1");
+        printf("\nJika tidak, masukkan angka 0");
+        printf("\n\nMasukkan angka : ");
+        scanf("%d", &orangtua); //cek kondisi apakah pewaris memiliki orang tua yang masih hidup
+        while(orangtua != 0 || orangtua != 1){ //error handling untuk orang tua pewaris
+          if(orangtua == 1){ //meminta data orang tua
+            printf("\n1. Bapak");
+            printf("\n2. Ibu");
+            printf("\n3. Keduanya");
+            printf("\n\nMasukkan angka : ");
+            scanf("%d", &pilih);
+            if(pilih == 1){ //bapak masih hidup
+              keluarga.bapak = 1;
+              keluarga.ibu = 0;
+              break;
+            }
+            else if(pilih == 2){ //ibu masih hidup
+              keluarga.bapak = 0;
+              keluarga.ibu = 1;
+              break;
+            }
+            else if(pilih == 3){ //kedua orang tua masih hidup
+              keluarga.bapak = 1;
+              keluarga.ibu = 1;
+              break;
+            }
+            else{
+              printf("\nMasukkan angka dengan benar !\n\n"); //error handling untuk orang tua pewaris
+            }
+          }
+          else if(orangtua == 0){ //keduanya telah tiada
+            keluarga.bapak = 0;
+            keluarga.ibu = 0;
+            break;
+          }
+          else{
+            printf("Masukkan angka dengan benar ! : "); //error handling orang tua
+            scanf("%d", &orangtua);
+          }
+        }
+        
+        perhitungan(harta, warisan, keluarga, keturunan, saudara, orangtua); //algoritma perhitungan harta warisan
+        list(keluarga); //list anggota keluarga yang mendapatkan warisan
+        display(warisan); //menampilkan hasil perhitungan harta waris
+		
+			//end of codes block
+			//---------------------------------------------------------
+}
 
 
 //--------------------------------------------------------
