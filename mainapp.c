@@ -91,6 +91,8 @@ int main(){
 	int menu, day, i, j, id_input,id, mutabaah, status, login, login_status, file_status, posisi;
 	int day_removed[50] = {}; //array untuk mengetahui hari yang telah di remove
 	
+	char temp; //untuk menghandling spasi
+	
 	//set variabel ke 0 untuk mencegah adanya garbage value
 	menu = 0;
 	mutabaah = 0;
@@ -155,7 +157,8 @@ int main(){
             			//target_status bernialai 1 menandakan user sudah menginput data identitas dan target
 						(userptr + id)->target_status = 1; 
 						printf("\nMasukan Nama : ");
-						scanf("%s", &(userptr + id)->nama);
+						scanf("%c", &temp);
+						scanf("%[^\n]", &(userptr + id)->nama);
 						printf("\n Masukan Target Rakaat Tahajud: ");
 						scanf("%d", &(userptr + id)->target_tahajud);
 						printf("\n Masukan Target Rakaat Dhuha: ");
@@ -276,7 +279,7 @@ void input_data(Amalanptr *sptr){
 	
 //	int sks_var, kode_var, bobot_var, status_var, condition;
 //	char nilai_var;
-	
+
 	Amalanptr currentptr; //pointer untuk menunjuk alamat yang sekarang
 	Amalanptr newptr; //pointer baru yang akan disisipkan
 	Amalanptr prevptr; //pointer sebelum currentptr
@@ -554,6 +557,8 @@ int file_user_read (User *userptr, int day_removed[50]){
 	//membaca file "userMuslim.txt"
 	fptr = fopen("userMuslim.txt", "r");
 	
+	char temp;
+	
   //jika tidak ada, maka membuat file baru bernama "userMuslim.txt"
 	if(fptr == NULL){
 		fclose(fptr);
@@ -563,8 +568,8 @@ int file_user_read (User *userptr, int day_removed[50]){
 	}
 	else{	
 		fseek(fptr, 0, SEEK_SET);
-	  //printf("\nFile sudah dibuat");
-    fscanf(fptr, "\n%s", &userptr->nama);
+		fscanf(fptr, "%c", &temp);
+	  	fscanf(fptr, "%[^\n]", &userptr->nama);
 		fscanf(fptr, "\n%d", &userptr->target_status);
 		fscanf(fptr, "\n%d", &userptr->target_tahajud);
 		fscanf(fptr, "\n%d", &userptr->target_dhuha);
@@ -586,7 +591,7 @@ int file_user_write (User *userptr, int day_removed[50]){
 	FILE *fptr;
 	//menulis ke file "userMuslim.txt"
 	fptr = fopen("userMuslim.txt", "w");
-	
+
 	fprintf(fptr, "\n%s", userptr->nama);
 	fprintf(fptr, "\n%d", userptr->target_status);
 	fprintf(fptr, "\n%d", userptr->target_tahajud);
