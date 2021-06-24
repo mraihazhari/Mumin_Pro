@@ -236,7 +236,7 @@ int main(){
 						scanf("%d", &day);
 						day--;
 						if(day >= (userptr + id)->day){
-							printf("\n\nAmalan hari ke %d belum pernah diinput\n\n", day);
+							printf("\n\nAmalan hari ke %d belum pernah diinput\n\n", day+1);
 							system("pause");
 							system("cls");
 							break;
@@ -854,6 +854,8 @@ int menuZakat() {
 						} 
 		}
 	}
+
+  system("cls");
 }
 
 //function untuk menghitung zakat penghasilan 
