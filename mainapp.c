@@ -247,8 +247,7 @@ int main(){
 						printf("\nData hari ke-%d berhasil dihapus\n\n", day+1);
 						system("pause");
 						system("cls");
-						break;
-          						
+						break;         						
 				}	
 			}
 			break;
