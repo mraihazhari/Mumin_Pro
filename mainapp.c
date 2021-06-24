@@ -118,6 +118,7 @@ int main(){
 		file_amalan_read(&startptr, day_removed, 0, &posisi);
 	}
 	
+	
 	//jika file_amalan_read sudah dibuat
 	else{
 	//loop dijalankan sebanyak data hari yang telah diinput oleh user
