@@ -238,9 +238,7 @@ int main(){
 						system("cls");
 						break;
           
-          case 5:
-            information();
-            break;
+         
 						
 				}	
 			}
@@ -256,6 +254,9 @@ int main(){
 			//case 3 (Harta Waris) was made by Fikri Afif Musyaffa
 				menuWaris();
 				break;
+			case 4:
+            	information();
+            	break;
       
 
 		}
@@ -536,7 +537,7 @@ void removeptr (Amalanptr *startPtr, int day, int day_removed[50]){
        //next ke list selanjutnya
  			prevPtr = currentPtr; 
  			currentPtr = currentPtr->next;
-  //jika currenptr bernilai NULL maka sudah mencapai link terakhir dan loop dihentikan
+  		//jika currenptr bernilai NULL maka sudah mencapai link terakhir dan loop dihentikan
 		 	if(currentPtr == NULL) {
 			 	break;
 			 }
@@ -725,10 +726,9 @@ void welcome(User *userptr){ //fungsi menu awal program
 	printf("\n\nMode Menu Mutabaah: ");
 	printf("\n1. Mutaba'ah Yaumiah (Evaluasi Ibadah Harian)");
 	printf("\n2. untuk Kalkulator Perhitungan Zakat");
-	printf("\n3. untuk Kalkulator Perhitungan Waris\n\n" );
-  printf("\n4. Menghapus Ibadah Harian");
-  printf("\n5. Untuk aturan penggunaan program");
-	printf("\n-1 Untuk keluar program");
+	printf("\n3. untuk Kalkulator Perhitungan Waris" );
+ 	printf("\n4. Untuk aturan penggunaan program");
+	printf("\n-1 Untuk keluar program\n\n");
 }
 //---------------------------------------------------
 
@@ -741,7 +741,6 @@ void help_mutabaah(){
 	printf("\n2. Input Ibadah Harian");
 	printf("\n3. Lihat Evaluasi Ibadah Harian");
 	printf("\n4. Menghapus Ibadah Harian");
-  printf("\n5. Untuk aturan penggunaan program");
 	printf("\n-1 Untuk keluar program");
 }
 
@@ -1423,20 +1422,26 @@ void display(int warisan[10]){ //menampilkan harta yang telah dibagi sesuai atur
 //petunjuk penggunaan program
 void information (){
   system("cls");
-  printf("Petunjuk penggunaan program: ");
+  printf("Petunjuk penggunaan program: \n");
   #pragma omp parallel
   {
     int tid;
+    
+    tid = omp_get_thread_num();
 
     if(tid == 0){ //pembagian tugas ke thread
-      printf("\nHarap masukan menu 1 (target) terlebih dahulu sebelum masuk ke menu selanjutnya");
-      printf("\nJika anda ingin kembali ke menu utama atau mengakhiri program harap tekan - 1");
+      printf("\n~~ Harap masukan menu 1 (target) terlebih dahulu sebelum masuk ke menu selanjutnya");
+      printf("\n~~ Jika anda ingin kembali ke menu utama atau mengakhiri program harap tekan - 1");
     }
 
     if(tid == 1){ //pembagian tugas ke thread
-      printf("\nAnda dapat mengubah target amalan atau identitas dengan menu 1");
-      printf("\nPastikan anda selalu menekan -1 untuk mengakhiri program supaya data anda tersimpan");
+      printf("\n~~ Anda dapat mengubah target amalan atau identitas dengan menu 1");
+      printf("\n~~ Pastikan anda selalu menekan -1 untuk mengakhiri program supaya data anda tersimpan");
     }
   }
+  
+  printf("\n\n");
+  system("pause");
+  system("cls");
 }
 
