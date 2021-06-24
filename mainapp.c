@@ -235,6 +235,12 @@ int main(){
 						printf("Pilih hari yang akan dihapus: ");
 						scanf("%d", &day);
 						day--;
+						if(day >= (userptr + id)->day){
+							printf("\n\nAmalan hari ke %d belum pernah diinput\n\n", day);
+							system("pause");
+							system("cls");
+							break;
+						}
 						removeptr (&startptr, day, day_removed);
 						day_removed[day] = 1;
 						printf("\nData hari ke-%d berhasil dihapus\n\n", day+1);
