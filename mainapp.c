@@ -913,7 +913,7 @@ void zakatPenghasilan() {
 //function untuk menghitung zakat harta
 void zakatMaal() {
   //variabel untuk menghitung zakat maal
-	int hartaTersimpan[9]
+	int hartaTersimpan[9];
 	int harta = 0;
 	int hutangTempo;
 	int hartaTerhitung;
