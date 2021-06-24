@@ -215,6 +215,7 @@ int main(){
 						break;
 						
 					case 4:
+						//case 4 user diminta untuk memasukan 
 						if((userptr + id)->target_status != 1){
 							printf("\nHarap masukan target terlebih dahulu\n\n");
 							system("pause");
@@ -683,14 +684,11 @@ void welcome(User *userptr){
 		printf("-");
 	}
 	
-	#pragma omp barrier
 	printf("\n\t\t\t Mu'min Pro\n");
 	#pragma omp for
 	for(i = 0; i < 60 ;i++){
 		printf("-");
 	}
-	
-	#pragma omp barrier
 	
 	printf("\nAssalamu'alaikum %s", (userptr)->nama);
 	printf("\n\nMode Menu Mutabaah: ");
