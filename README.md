@@ -12,5 +12,7 @@ Language : Bahasa Indonesia
 Description:
 Mu'min pro is a program for all of muslims to calculate faraid, calculate zakat, and record daily worship activities (Mutabaáh Yaumiyah)
 
+Video (in bahasa) : https://youtu.be/JyQSZs5hyys
+
 as final programming assignment in Even Semester 2020/2021 for course Advance Programming + Lab. 
 (ENCE602003) in Undergraduate of Computer Engineering study program, Department of Electrical Engineering, Faculty of Engineering, Universitas Indonesia.
