@@ -750,6 +750,10 @@ void help_mutabaah(){
 	printf("\n-1 Untuk keluar program");
 }
 
+//---------------------------
+
+//-----------------------
+//M. Taqiy Nur Furqon
 int file_removed_write(int day[50]){ //fungsi untuk menghapus hari
 	
 	FILE *fptr;
@@ -771,7 +775,7 @@ int file_removed_write(int day[50]){ //fungsi untuk menghapus hari
 
 
 //---------------------------------------------------
-//Fikri Afif Musyaffa
+//M. Taqiy Nur Furqon
 int file_removed_read(int day[50]){
 	
 	FILE *fptr;
@@ -802,11 +806,13 @@ int file_removed_read(int day[50]){
 
 //function untuk menampilkan menu perhitungan zakat
 int menuZakat() {
-	int pilihan;
-	int pilihan2;
+	int pilihan;//varibel untuk pemilihan menu pada menu zakat
+	int pilihan2;//variabel untuk pemilihan menu pada menu petunjuk zakat
 	
+  //program zakat akan terus berjalan sampai pilihan bernilai -1
 	while(pilihan != -1) {
 		system("cls");
+
 		printf("\t\t\t\tKalkulator Zakat\n");
 		printf("\n1. Zakat Penghasilan\n");
 		printf("2. Zakat Maal\n");
@@ -814,7 +820,8 @@ int menuZakat() {
 		printf("-1. Kembali ke menu utama\n");
 		printf("\n>>>");
 		scanf("%d", &pilihan);
-		switch (pilihan) {
+	
+    switch (pilihan) {
 			case 1	: 	system("cls");
 						zakatPenghasilan();
 						system("pause");
@@ -847,7 +854,7 @@ int menuZakat() {
 						} 
 						break;
 			default	:	printf("Input tidak sesuai");
-						system("cls");
+						system("pause");
 						break;
 		}
 	}
@@ -855,12 +862,14 @@ int menuZakat() {
 
 //function untuk menghitung zakat penghasilan 
 void zakatPenghasilan() {
-	int penghasilan[2], i;
+  //variabel untuk menghitung zakat penghasilan
+	int penghasilan[2];
 	int pengeluaran;
 	int penghasilanBersih = 0;
 	int hargaBeras;
 	int nisabZakat;
 	int jumlahZakat;
+  int i;//variabel counter untuk looping
 	
 	printf("\t\t\tZakat Penghasilan\n\n");
 	printf("Penghasilan/gaji per bulan:\nRp ");
@@ -871,11 +880,14 @@ void zakatPenghasilan() {
 	printf("Kebutuhan pokok termasuk kebutuhan sandang, pangan, papan, pendidikan, kesehatan dan alat transportasi primer.\nRp ");
 	scanf("%d", &pengeluaran);
 	
+  //menghitung penghasilan bersih untuk perhitungan zakat
 	penghasilanBersih = jumlah(penghasilan, 2, 0) - pengeluaran;
 	
+  //menampilkan jumlah penghasilan bersih
 	printf("\nJumlah Penghasilan per bulan:\n");
 	printf("Rp %d", penghasilanBersih);
 	
+  //menghitung nisab zakat
 	printf("\n\t\t\tNisab Zakat Penghasilan\n");
 	printf("Nisab adalah syarat jumlah minimum (ambang batas) harta yang dapat dikategorikan sebagai harta wajib zakat.\n"); 
 	printf("Untuk penghasilan yang diwajibkan zakat adalah penghasilan yang berada diatas nisab.\n");
@@ -883,29 +895,35 @@ void zakatPenghasilan() {
 	printf("\n Masukkan harga beras saat ini (per kg)\nRp ");
 	scanf("%d", &hargaBeras);
 	nisabZakat = hargaBeras * 522;
+
 	printf("\nBesarnya Nisab Zakat Penghasilan per Bulan\n");
 	printf("Rp %d", nisabZakat);
-	 
+
+  //pengecekan penghasilan bersih terhadap nisab untuk penentuan pembayaran zakat 
 	if (penghasilanBersih >= nisabZakat) {
 		printf("\n\nAnda diwajibkan membayar zakat\n");
 		printf("Jumlah yang harus dibayarkan adalah:\n");
-		zakat(&jumlahZakat, penghasilanBersih);
+		zakat(&jumlahZakat, penghasilanBersih);//memanggil fungsi zakat untuk menampilkan jumlah zakat yang dibayarkan
 		printf("Rp %d", jumlahZakat);
 	}
 	else
 		printf("\nAnda tidak diwajibkan membayar zakat\n");
 }
+
 //function untuk menghitung zakat harta
 void zakatMaal() {
-	int hartaTersimpan[9], i;
+  //variabel untuk menghitung zakat maal
+	int hartaTersimpan[9]
 	int harta = 0;
 	int hutangTempo;
 	int hartaTerhitung;
 	int hargaEmas;
 	int nisabZakat;
 	int jumlahZakat;
+  int i;//variabel counter untuk looping
 	
 	list_zakatMaal();//memanggil function list_zakatMaal
+  
 	printf("\nMasukkan jumlah harta berikut secara berurutan:\n");
 	
 	for(i = 0; i < 9; i++) {
@@ -916,35 +934,41 @@ void zakatMaal() {
 	printf("\nHutang jatuh tempo saat membayar kewajiban zakat:\nRp ");
 	scanf("%d", &hutangTempo);
 	
+  //menghitung jumlah harta yang akan dihitung dalam zakat
 	hartaTerhitung = jumlah(hartaTersimpan, 9, 0) - hutangTempo;
 	
 	system("cls");
+
 	//Menampilkan hasil input hartaTersimpan
 	list_zakatMaal();
 	#pragma omp for
 	for(i = 0; i < 9; i++) {
 		printf("%d. Rp %d\n", i + 1, hartaTersimpan[i]);
 	}
-	
 
+  //menampilkan jumlah harta yang akan dihitung dalam zakat
 	printf("Jumlah harta yang dihitung zakatnya:\n");
 	printf("Rp %d\n", hartaTerhitung);
 	
 	printf("\n Masukkan harga emas saat ini (dalam gram)\nRp ");
 	scanf("%d", &hargaEmas);
+
+  //menghitung jumlah nisab dan menampilkannya
 	nisabZakat = hargaEmas * 85;
-	printf("\nBesarnya Nisab Zakat Penghasilan per Bulan\n");
+  printf("\nBesarnya Nisab Zakat Penghasilan per Bulan\n");
 	printf("Rp %d\n", nisabZakat);
-	 
+	
+  //pengecekan harta yang dihitung terhadap nisab untuk penentuan zakat
 	if (hartaTerhitung >= nisabZakat) {
 		printf("\nAnda diwajibkan membayar zakat\n");
 		printf("Jumlah yang harus dibayarkan adalah:\n");
-		zakat(&jumlahZakat, hartaTerhitung);
+		zakat(&jumlahZakat, hartaTerhitung);//memanggil fungsi zakat untuk menampilkan jumlah zakat yang dibayarkan
 		printf("Rp %d", jumlahZakat);
 	}
 	else
 		printf("\nAnda tidak diwajibkan membayar zakat\n");
 }
+
 //function untuk menghitung jumlah dari suatu array
 int jumlah(int x[], int n, int i) {
 	int sum;
@@ -956,10 +980,12 @@ int jumlah(int x[], int n, int i) {
 	
 	return sum;
 }
+
 //function dasar untuk menghitung besar zakat
 int zakat(int * x, int y) {
 	* x = y * 0.025;
 }
+
 //function untuk menampilkan harta yang perlu diinput untuk menghitung zakat maal
 void list_zakatMaal() {
 	printf("\t\t\tZakat Maal\n\n");
@@ -973,6 +999,7 @@ void list_zakatMaal() {
 	printf("8. Harta dalam bentuk lainnya\n");
 	printf("9. Harta dalam bentuk Piutang Lancar\n\n");
 }
+
 //function untuk menampilkan petunjuk zakat penghasilan
 void petunjuk_zakatPenghasilan() {
 	printf("\t\t\tPetunjuk Zakat Penghasilan");
@@ -988,6 +1015,7 @@ void petunjuk_zakatPenghasilan() {
 	printf("9. Program akan menununjukkan apakah Anda perlu membayar zakat.\n");
 	printf("   Jika iya, maka program akan menampilkan jumlah zakat yang harus dibayarkan.\n\n");
 }
+
 //function untuk menampilkan petunjuk zakat harta (maal)
 void petunjuk_zakatMaal() {
 	printf("\t\t\tPetunjuk Zakat Maal\n");
