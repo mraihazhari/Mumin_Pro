@@ -32,6 +32,9 @@ typedef struct User{
 typedef struct amalan Amalan;
 typedef Amalan *Amalanptr;
 
+//end of codes block
+//----------------------------------------------------
+
 struct keluarga{ //struct untuk anggota keluarga waris
 
   //variabel anggota keluarga
@@ -47,8 +50,7 @@ struct keluarga{ //struct untuk anggota keluarga waris
 	int cucupr;
 };
 
-//end of codes block
-//----------------------------------------------------
+
 
 void input_data(Amalanptr *sptr);
 void input_menu();
@@ -227,9 +229,11 @@ int main(){
 						printf("\nData hari ke-%d berhasil dihapus\n\n", day+1);
 						system("pause");
 						system("cls");
+						break;
 						
 				}	
 			}
+			break;
 			//end of codes block
 			//---------------------------------------------------------
 			
