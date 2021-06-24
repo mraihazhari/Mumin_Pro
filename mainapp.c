@@ -241,9 +241,7 @@ int main(){
 						system("pause");
 						system("cls");
 						break;
-          
-         
-						
+          						
 				}	
 			}
 			break;
@@ -259,9 +257,8 @@ int main(){
 				menuWaris();
 				break;
 			case 4:
-            	information();
-            	break;
-      
+        information();
+        break;
 
 		}
 	}
@@ -830,12 +827,12 @@ int menuZakat() {
 						zakatMaal();
 						system("pause");
 						break;
-			case 3	: 	while (pilihan2 != 3) {
+			case 3	: 	while (pilihan2 != -1) {
 							system("cls");
 							printf("\t\t\t\tPetunjuk Kalkulator Zakat\n");
 							printf("\n1. Zakat Penghasilan\n");
 							printf("2. Zakat Maal\n");
-							printf("3. Kembali ke menu zakat\n");
+							printf("-1. Kembali ke menu zakat\n");
 							printf(">>>");
 							scanf("%d", &pilihan2);
 							switch (pilihan2) {
@@ -847,15 +844,8 @@ int menuZakat() {
 												petunjuk_zakatMaal();
 												system("pause");
 												break;
-								default		: 	printf("Input tidak sesuai\n");
-												system("pause");
-												break;
 							}
 						} 
-						break;
-			default	:	printf("Input tidak sesuai");
-						system("pause");
-						break;
 		}
 	}
 }
@@ -904,7 +894,7 @@ void zakatPenghasilan() {
 		printf("\n\nAnda diwajibkan membayar zakat\n");
 		printf("Jumlah yang harus dibayarkan adalah:\n");
 		zakat(&jumlahZakat, penghasilanBersih);//memanggil fungsi zakat untuk menampilkan jumlah zakat yang dibayarkan
-		printf("Rp %d", jumlahZakat);
+		printf("Rp %d\n\n", jumlahZakat);
 	}
 	else
 		printf("\nAnda tidak diwajibkan membayar zakat\n");
@@ -963,7 +953,7 @@ void zakatMaal() {
 		printf("\nAnda diwajibkan membayar zakat\n");
 		printf("Jumlah yang harus dibayarkan adalah:\n");
 		zakat(&jumlahZakat, hartaTerhitung);//memanggil fungsi zakat untuk menampilkan jumlah zakat yang dibayarkan
-		printf("Rp %d", jumlahZakat);
+		printf("Rp %d\n\n", jumlahZakat);
 	}
 	else
 		printf("\nAnda tidak diwajibkan membayar zakat\n");
@@ -988,7 +978,7 @@ int zakat(int * x, int y) {
 
 //function untuk menampilkan harta yang perlu diinput untuk menghitung zakat maal
 void list_zakatMaal() {
-	printf("\t\t\tZakat Maal\n\n");
+	printf("\t\t\tZakat Maal\n");
 	printf("1. Harta dalam bentuk Tabungan/Giro/Deposito\n");
 	printf("2. Harta dalam bentuk logam mulia\n");
 	printf("3. Harta dalam bentuk surat berharga\n");
@@ -1002,7 +992,7 @@ void list_zakatMaal() {
 
 //function untuk menampilkan petunjuk zakat penghasilan
 void petunjuk_zakatPenghasilan() {
-	printf("\t\t\tPetunjuk Zakat Penghasilan");
+	printf("\t\t\tPetunjuk Zakat Penghasilan\n\n");
 	printf("1. Program ini akan menghitung jumlah zakat penghasilan.\n");
 	printf("2. Untuk memulai program ini, masukkan angka 1 pada menu zakat.\n");
 	printf("3. Anda akan diminta untuk memasukkan penghasilan bulanan Anda.\n");
@@ -1018,7 +1008,7 @@ void petunjuk_zakatPenghasilan() {
 
 //function untuk menampilkan petunjuk zakat harta (maal)
 void petunjuk_zakatMaal() {
-	printf("\t\t\tPetunjuk Zakat Maal\n");
+	printf("\t\t\tPetunjuk Zakat Maal\n\n");
 	printf("1. Program ini akan menghitung jumlah zakat maal.\n");
 	printf("2. Untuk memulai program ini, masukkan angka 2 pada menu zakat.\n");
 	printf("3. Anda akan diminta untuk memasukkan harta yang Anda miliki sebagai berikut:\n");
@@ -1212,6 +1202,7 @@ int menuWaris(){
       perhitungan(harta, warisan, keluarga, keturunan, saudara, orangtua); //algoritma perhitungan harta warisan
       list(keluarga); //list anggota keluarga yang mendapatkan warisan
       display(warisan); //menampilkan hasil perhitungan harta waris
+      printf("\n\n\n");
       system("pause");
       system("cls");
 		
@@ -1466,6 +1457,7 @@ void information (){
     if(tid == 0){ //pembagian tugas ke thread
       printf("\n~~ Harap masukan menu 1 (target) terlebih dahulu sebelum masuk ke menu selanjutnya");
       printf("\n~~ Jika anda ingin kembali ke menu utama atau mengakhiri program harap tekan - 1");
+      printf("\n~~ Jangan pernah memasukan huruf !, Jika terjadi maka bisa restart program");
     }
 
     if(tid == 1){ //pembagian tugas ke thread
