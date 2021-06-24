@@ -159,14 +159,14 @@ int main(){
 						printf("\nMasukan Nama : ");
 						scanf("%c", &temp);
 						scanf("%[^\n]", &(userptr + id)->nama);
-						printf("\n Masukan Target Rakaat Tahajud: ");
+						printf("Masukan Target Rakaat Tahajud: ");
 						scanf("%d", &(userptr + id)->target_tahajud);
-						printf("\n Masukan Target Rakaat Dhuha: ");
+						printf("Masukan Target Rakaat Dhuha: ");
 						scanf("%d", &(userptr + id)->target_dhuha);
 						(userptr + id)->target_wajib = 5; //target sholat wajib di set sebagai 5 karena merupakan ibadah wajib
-						printf("\n Masukan Target Halaman Tilawah: ");
+						printf("Masukan Target Halaman Tilawah: ");
 						scanf("%d", &(userptr + id)->target_tilawah);
-						printf("\n Masukan Target Ayat Tahfidz: ");
+						printf("Masukan Target Ayat Tahfidz: ");
 						scanf("%d", &(userptr + id)->target_tahfidz);
 						printf("\n\n");
 						system("pause");
@@ -211,6 +211,7 @@ int main(){
 							system("cls");
 							break;
 						}
+						printf("\nAssalamualaikum %s", (userptr + id)->nama);
 						//mencetak detail amalan harian yang dilakukan oleh user
 						printAmalan((userptr + id)->data, day_removed, userptr);
 						printf("\n\n");
@@ -442,7 +443,7 @@ void print_evaluasi(Amalanptr current, User *userptr , int day_removed[50]){
 							float result_tahajud = rata_tahajud /(float) userptr->target_tahajud;
 							#pragma omp critical //supaya terhindar dari race condition
 							{
-								printf("\n\n~~Tahajud~~ ");
+								printf("\n\n\t   ~~Tahajud~~ ");
 								printf("\nRata-rata Rakaat setiap harinya : %.2f", rata_tahajud);
 								printf("\nPersen ketercapaian target: %.2f %", result_tahajud * 100);
 							}
@@ -453,7 +454,7 @@ void print_evaluasi(Amalanptr current, User *userptr , int day_removed[50]){
 							float result_dhuha = rata_dhuha /(float)userptr->target_dhuha;
 							#pragma omp critical //supaya terhindar dari race condition
 							{
-								printf("\n\n~~Dhuha~~ ");
+								printf("\n\n\t   ~~Dhuha~~ ");
 								printf("\nRata-rata Rakaat setiap harinya : %.2f", rata_dhuha);
 								printf("\nPersen ketercapaian target: %.2f %", result_dhuha * 100);
 							}
@@ -464,7 +465,7 @@ void print_evaluasi(Amalanptr current, User *userptr , int day_removed[50]){
 							float result_wajib = rata_wajib /(float)userptr->target_wajib;
 							#pragma omp critical //supaya terhindar dari race condition
 							{
-								printf("\n\n~~Sholat wajib 5 waktu~~ ");
+								printf("\n\n    ~~Sholat wajib 5 waktu~~ ");
 								printf("\nRata-rata Rakaat setiap harinya : %.2f", rata_wajib);
 								printf("\nPersen ketercapaian target: %.2f %", result_wajib * 100);
 							}
@@ -474,7 +475,7 @@ void print_evaluasi(Amalanptr current, User *userptr , int day_removed[50]){
 							float result_tilawah = rata_tilawah /(float)userptr->target_tilawah;
 							#pragma omp critical //supaya terhindar dari race condition
 							{
-								printf("\n\n~~Tilawah~~ ");
+								printf("\n\n\t   ~~Tilawah~~ ");
 								printf("\nRata-rata Halaman setiap harinya : %.2f", rata_tilawah);
 								printf("\nPersen ketercapaian target: %.2f %", result_tilawah * 100);
 							}
@@ -484,7 +485,7 @@ void print_evaluasi(Amalanptr current, User *userptr , int day_removed[50]){
 							float result_tahfidz = rata_tahfidz /(float)userptr->target_tahfidz;
 							#pragma omp critical //supaya terhindar dari race condition
 							{
-									printf("\n\n~~Tahfidz~~ ");
+									printf("\n\n\t   ~~Tahfidz~~ ");
 									printf("\nRata-rata Halaman setiap harinya : %.2f", rata_tahfidz);
 									printf("\nPersen ketercapaian target: %.2f %", result_tahfidz * 100);
 		
